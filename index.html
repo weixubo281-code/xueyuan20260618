@@ -627,7 +627,9 @@
                 <footer><span>UI / 方案</span><span>已完成作业</span></footer>
               </article></div></div>
           <div class="featured-review">
-            <video src="https://github.com/weixubo281-code/xueyuan20260618/raw/refs/heads/main/Video_21.mp4" poster="https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/491fb3a7-aa96-4243-8cf2-c339424ecdd1_800w.webp" muted playsinline autoplay loop preload="metadata" aria-label="学员评价视频"></video>
+            <video id="xiaomeiStudentVideo" muted playsinline autoplay loop preload="auto" aria-label="学员评价视频">
+              <source src="https://raw.githubusercontent.com/weixubo281-code/xueyuan20260618/main/Video_21.mp4?v=20260618_04" type="video/mp4">
+            </video>
             <div class="featured-tag"><span class="dot"></span>Featured student story</div>
             <div class="featured-review-content">
               <blockquote>“两周时间不长，但终于把AIGC工具串成了一条完整流程。”</blockquote>
@@ -934,6 +936,38 @@
       document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePop(); });
     })();
   </script>
+
+
+    <script>
+      // Force the student story video to always load the latest xiaomei video instead of any cached old poster/video.
+      (function(){
+        const VIDEO_URL = "https://raw.githubusercontent.com/weixubo281-code/xueyuan20260618/main/Video_21.mp4?v=20260618_04";
+        function refreshStudentVideo(){
+          const video = document.getElementById('xiaomeiStudentVideo');
+          if(!video) return;
+          video.removeAttribute('poster');
+          video.setAttribute('preload','auto');
+          let source = video.querySelector('source');
+          if(!source){
+            source = document.createElement('source');
+            source.type = 'video/mp4';
+            video.appendChild(source);
+          }
+          if(source.getAttribute('src') !== VIDEO_URL){
+            source.setAttribute('src', VIDEO_URL);
+          }
+          if(video.getAttribute('src')) video.removeAttribute('src');
+          video.load();
+          const playPromise = video.play();
+          if(playPromise && typeof playPromise.catch === 'function') playPromise.catch(function(){});
+        }
+        if(document.readyState === 'loading'){
+          document.addEventListener('DOMContentLoaded', refreshStudentVideo);
+        }else{
+          refreshStudentVideo();
+        }
+      })();
+    </script>
 
 </body>
 </html>
